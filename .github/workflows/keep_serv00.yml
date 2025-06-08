@@ -1,0 +1,87 @@
+name: keep_serv00
+
+on:
+  workflow_dispatch:  # 支持手动执行
+  schedule:
+    - cron: '0 16 * * *'  # 每天北京时间 00:00（UTC+8）
+
+jobs:
+  keep_serv00:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        server: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set common secrets
+        run: |
+          echo "SERVER_HOSTNAME=${{ secrets.SERVER_HOSTNAME }}" >> $GITHUB_ENV
+          echo "SERVER_PASSWORD=${{ secrets.SERVER_PASSWORD }}" >> $GITHUB_ENV
+          echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Set server-specific variables
+        run: |
+          case "${{ matrix.server }}" in
+            1)
+              echo "SERVER_USERNAME=coffeebabyfamer" >> $GITHUB_ENV
+              ;;
+            2)
+              echo "SERVER_USERNAME=coffeebabycolor" >> $GITHUB_ENV
+              ;;
+            3)
+              echo "SERVER_USERNAME=coffeebigsister" >> $GITHUB_ENV
+              ;;
+            4)
+              echo "SERVER_USERNAME=coffeebabyhome" >> $GITHUB_ENV
+              ;;
+            5)
+              echo "SERVER_USERNAME=coffeehomebaby" >> $GITHUB_ENV
+              ;;
+            6)
+              echo "SERVER_USERNAME=coffeebabyduck" >> $GITHUB_ENV
+              ;;
+            7)
+              echo "SERVER_USERNAME=coffeebabyworld" >> $GITHUB_ENV
+              ;;
+            8)
+              echo "SERVER_USERNAME=coffeebabystone" >> $GITHUB_ENV
+              ;;
+            9)
+              echo "SERVER_USERNAME=coffeebabywater" >> $GITHUB_ENV
+              ;;
+            10)
+              echo "SERVER_USERNAME=coffeebabynumber" >> $GITHUB_ENV
+              ;;
+          esac
+            
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass || echo "sshpass already installed"
+
+      - name: SSH into server and run script
+        run: |
+          sshpass -p "${{ env.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no -T ${{ env.SERVER_USERNAME }}@${{ env.SERVER_HOSTNAME }} -o ConnectTimeout=10 2>/tmp/ssh_error.log || {
+            echo -e "\033[31mSSH connection failed! Please check your SSH credentials or server status.\033[0m"
+            echo -e "\033[31mError details:\033[0m"
+            cat /tmp/ssh_error.log
+            exit 1
+           }
+           
+          sshpass -p "${{ env.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no -T ${{ env.SERVER_USERNAME }}@${{ env.SERVER_HOSTNAME }} 2>/dev/null << EOF
+            set -e 
+            curl -Ls https://raw.githubusercontent.com/co2f2e/Serv00/main/bash/keep_serv00.sh -o keep_serv00.sh || { echo 'Script download failed'; exit 1; }
+            bash keep_serv00.sh "${{ env.PASSWORD }}" || { echo 'Script execution failed'; exit 1; }
+            if [ $? -eq 0 ]; then
+              echo
+              echo -e "\033[32mSuccess\033[0m"
+              echo
+            else
+              echo
+              echo -e "\033[31mFailure\033[0m"
+              echo
+              exit 1
+            fi
+          EOF
