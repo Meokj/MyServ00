@@ -24,16 +24,34 @@ jobs:
         run: |
           case "${{ matrix.server }}" in
             1)
-              echo "SERVER_USERNAME=coffeebabysoster" >> $GITHUB_ENV
+              echo "SERVER_USERNAME=coffeebabyfamer" >> $GITHUB_ENV
               ;;
             2)
-              echo "SERVER_USERNAME=coffeebabyheart" >> $GITHUB_ENV
+              echo "SERVER_USERNAME=coffeebabycolor" >> $GITHUB_ENV
               ;;
             3)
-              echo "SERVER_USERNAME=coffeebabyworker" >> $GITHUB_ENV
+              echo "SERVER_USERNAME=coffeebigsister" >> $GITHUB_ENV
               ;;
             4)
-              echo "SERVER_USERNAME=coffeebabybaby" >> $GITHUB_ENV
+              echo "SERVER_USERNAME=coffeebabyhome" >> $GITHUB_ENV
+              ;;
+            5)
+              echo "SERVER_USERNAME=coffeehomebaby" >> $GITHUB_ENV
+              ;;
+            6)
+              echo "SERVER_USERNAME=coffeebabyduck" >> $GITHUB_ENV
+              ;;
+            7)
+              echo "SERVER_USERNAME=coffeebabyworld" >> $GITHUB_ENV
+              ;;
+            8)
+              echo "SERVER_USERNAME=coffeebabystone" >> $GITHUB_ENV
+              ;;
+            9)
+              echo "SERVER_USERNAME=coffeebabywater" >> $GITHUB_ENV
+              ;;
+            10)
+              echo "SERVER_USERNAME=coffeebabynumber" >> $GITHUB_ENV
               ;;
           esac
             
