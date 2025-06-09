@@ -22,7 +22,7 @@ jobs:
 
       - name: Set server-specific secrets and alias
         run: |
-           case "${{ matrix.server }}" in
+          case "${{ matrix.server }}" in
             1)
               echo "SERVER_USERNAME=${{ secrets.SERVER_USERNAME_1 }}" >> $GITHUB_ENV
               echo "SERVER_ALIAS=节点1" >> $GITHUB_ENV
@@ -68,7 +68,6 @@ jobs:
       - name: Install sshpass
         run: sudo apt-get install -y sshpass || echo "sshpass already installed"
 
-          
       - name: SSH into server and run script
         run: |
 
