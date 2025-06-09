@@ -65,7 +65,7 @@ jobs:
         run: |
 
           sshpass -p "${{ env.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no -T ${{ env.USERNAME }}@${{ env.SERVER_HOSTNAME }} -o ConnectTimeout=10 2>/tmp/ssh_error.log || {
-            echo -e "\❌ SSH连接失败\"
+            echo -e "\n❌ SSH连接失败\n"
             cat /tmp/ssh_error.log
             exit 1
           }
