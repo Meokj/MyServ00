@@ -67,7 +67,10 @@ jobs:
               echo "SERVER_ALIAS=节点10" >> $GITHUB_ENV
               ;;
           esac
-          
+
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass || echo "sshpass already installed"
+
       - name: SSH into server and run script
         run: |
 
