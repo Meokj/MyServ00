@@ -57,8 +57,14 @@ first() {
 }
 
 preparatory_work() {
-	[ -d "$WORKDIR" ] && rm -rf "$WORKDIR" && mkdir -p "$WORKDIR" && chmod 777 "$WORKDIR" || (mkdir -p "$WORKDIR" && chmod 777 "$WORKDIR")
-	ps aux | grep $(whoami) | grep -v "sshd\|bash\|grep" | awk '{print $2}' | xargs -r kill -9 >/dev/null 2>&1
+	if [ -d "$WORKDIR" ]; then
+    		rm -rf "$WORKDIR"
+	fi
+
+	mkdir -p "$WORKDIR"
+	chmod 777 "$WORKDIR"
+
+	ps aux | grep "$(whoami)" | grep -vE "sshd|bash|grep" | awk '{print $2}' | xargs -r kill -9 >/dev/null 2>&1
 }
 
 install_singbox() {
