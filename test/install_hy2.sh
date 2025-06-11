@@ -3,6 +3,10 @@ clear
 
 PASSWORD=$1
 
+if [ -d ~/hysteria2 ]; then
+  rm -rf ~/hysteria2
+fi
+
 mkdir -p ~/hysteria2
 cd ~/hysteria2
 
