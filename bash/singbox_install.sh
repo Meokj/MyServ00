@@ -38,7 +38,6 @@ get_udp_port() {
 			fi
 		done
 	fi
-
 	echo "$udp_port"
 }
 
