@@ -59,7 +59,7 @@ tls:
 
 auth:
   type: password
-  password: "tellmewhy123"
+  password: "${PASSWORD}"
 
 transport:
   type: proxy
