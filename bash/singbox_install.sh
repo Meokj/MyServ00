@@ -80,7 +80,7 @@ download_singbox() {
 	local attempt=1
 
 	while [ $attempt -le $max_retries ]; do
-		wget -O "$output" "$url"
+		wget -O "$output" "$url" >/dev/null 2>&1
 		if [ $? -eq 0 ]; then
 			chmod +x "$output"
 			return 0
