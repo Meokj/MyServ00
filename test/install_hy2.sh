@@ -51,21 +51,20 @@ generate_configuration() {
   openssl req -new -x509 -days 3650 -key "private.key" -out "cert.pem" -subj "/CN=${USERNAME}.serv00.net"
 
   cat >config.yaml <<EOF
-listen: ":${UDP_PORT}"
-
+listen: :${UDP_PORT}
 tls:
   cert: cert.pem
   key: private.key
-
+speedTest: true
 auth:
   type: password
-  password: "${PASSWORD}"
-
-transport:
+  password: ${PASSWORD}
+masquerade:
   type: proxy
   proxy:
-    url: https://bing.com/
+    url: https://bing.com
     rewriteHost: true
+    insecure: false
 EOF
 }
 
