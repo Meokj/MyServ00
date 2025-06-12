@@ -10,9 +10,14 @@ fi
 mkdir -p ~/hysteria2
 cd ~/hysteria2
 
-fetch https://github.com/apernet/hysteria/releases/latest/download/hysteria-freebsd-amd64
-chmod +x hysteria-freebsd-amd64
-mv hysteria-freebsd-amd64 hysteria2
+if fetch -o hysteria2 https://github.com/apernet/hysteria/releases/latest/download/hysteria-freebsd-amd64 >/dev/null 2>&1; then
+  :
+else
+  echo "下载hysteria2失败"
+  exit 1
+fi
+
+chmod +x hysteria2
 
 USERNAME=$(whoami)
 
@@ -55,6 +60,8 @@ listen: ${IP}:${UDP_PORT}
 tls:
   cert: cert.pem
   key: private.key
+  alpn:
+    - h3
 speedTest: true
 auth:
   type: password
@@ -120,8 +127,10 @@ run_hysteria2() {
 }
 
 get_links() {
+ ISP=$(curl -s --max-time 2 https://speed.cloudflare.com/meta | awk -F\" '{print $26}' | sed -e 's/ /_/g' || echo "0")
+ NUMBER=$(hostname | cut -d '.' -f1)
     cat >list.txt <<EOF
-hysteria2://${PASSWORD}@$IP:$UDP_PORT/?sni=www.bing.com&alpn=h3&insecure=1#${USERNAME}
+hysteria2://${PASSWORD}@$IP:$UDP_PORT/?sni=www.bing.com&alpn=h3&insecure=1#${ISP}-${NUMBER}-{USERNAME}
 EOF
   echo
   echo "$hysteria2节点信息如下："
