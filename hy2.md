@@ -48,7 +48,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/hy2/init_s
 5. 分别复制[keep_hy2.txt](./hy2/keep_hy2.txt)和[uninstall_hy2.txt](./hy2/uninstall_hy2.txt)的内容到对应的yml中并保存
 6. 添加三个**仓库机密**：`SERVER_PASSWORD`、`SERVER_HOSTNAME`、`PASSWORD`
 7. 添加**仓库变量**`USERNAME_1`，`USERNAME_2`，根据SERV00账号数量以此类推
-8. 修改中`keep_hy2.yml`两处代码片段：
+8. 修改`keep_hy2.yml`两处代码片段：
 
 ```bash
 strategy:
