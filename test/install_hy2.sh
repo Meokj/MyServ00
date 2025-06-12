@@ -55,11 +55,16 @@ listen: ${IP}:${UDP_PORT}
 tls:
   cert: cert.pem
   key: private.key
-  insecure: true
 speedTest: true
 auth:
   type: password
   password: ${PASSWORD}
+masquerade:
+  type: proxy
+  proxy:
+    url: https://bing.com
+    rewriteHost: true
+    insecure: true
 EOF
 }
 
