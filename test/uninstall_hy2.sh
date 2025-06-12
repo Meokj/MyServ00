@@ -1,4 +1,6 @@
 #!/bin/bash
+clear
+PROCESS_NAME="hysteria2"
 manage_ports() {
     local udp_ports tcp_ports udp_port
 
