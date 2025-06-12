@@ -4,6 +4,7 @@ cd ~
 PASSWORD=$1
 USERNAME=$(whoami)
 CONFIG_FILE="~/hysteria2/config.yaml"
+CRONJOB="*/2 * * * * ~/hysteria2/check_process.sh"
 
 check() {
     if [ ! -f "$CONFIG_FILE" ]; then
@@ -169,15 +170,15 @@ scheduled_task() {
   cat <<'EOF' >"check_process.sh"
 #!/bin/bash
 if ! pgrep -f hysteria2 > /dev/null; then
-  cd ~/hysterai2
+  cd ~/hysteria2
   nohup ./hysteria2 server -c config.yaml >/dev/null 2>&1 &
 fi
 EOF
 
   chmod +x "check_process.sh"
   (
-    crontab -l 2>/dev/null | grep -v -F "$cronjob"
-    echo "$cronjob"
+    crontab -l 2>/dev/null | grep -v -F "$CRONJOB"
+    echo "$CRONJOB"
   ) | crontab -
   echo "已添加定时任务每2分钟检测一次该进程，如果不存在则后台启动"
 }
@@ -188,5 +189,5 @@ download
 get_udp_port
 generate_configuration
 run_hysteria2
-get_links
 scheduled_task
+get_links
