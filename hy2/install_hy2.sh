@@ -23,33 +23,6 @@ download() {
   chmod +x hysteria2
 }
 
-get_udp_port() {
-  UDP_PORT=""
-  udp_port=$(devil port list | awk '$2=="udp"{print $1; exit}')
-
-  if [[ -n "$udp_port" ]]; then
-    UDP_PORT=$udp_port
-  else
-    local port_lines port_count random_port result rand_port
-    port_lines=$(devil port list | awk 'NR>1')
-    port_count=$(echo "$port_lines" | wc -l)
-
-    if [[ $port_count -ge 3 ]]; then
-      random_port=$(echo "$port_lines" | shuf -n 1 | awk '{print $1}')
-      devil port remove "$random_port"
-    fi
-
-    while true; do
-      rand_port=$(shuf -i 10000-65535 -n 1)
-      result=$(devil port add udp "$rand_port" 2>&1)
-      if [[ $result == *"Ok"* ]]; then
-        UDP_PORT=$rand_port
-        break
-      fi
-    done
-  fi
-}
-
 get_ports() {
   UDP_PORT=""
   TCP_PORT=""
@@ -92,8 +65,6 @@ get_ports() {
     done
   fi
 }
-
-
 
 generate_configuration() {
   openssl ecparam -genkey -name prime256v1 -out "private.key"
