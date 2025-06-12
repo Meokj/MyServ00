@@ -102,15 +102,15 @@ run_hysteria2() {
     nohup ./hysteria2 server -c config.yaml >/dev/null 2>&1 &
     sleep 2
     echo
-    pgrep -x "hysteria2" >/dev/null && green "hysteria2 正在运行" || {
-      red "hysteria2 未运行, 正在重启"
+    pgrep -x "hysteria2" >/dev/null && echo "hysteria2 正在运行" || {
+      echo "hysteria2 未运行, 正在重启"
       pkill -x "hysteria2"
       nohup ./hysteria2 server -c config.yaml >/dev/null 2>&1 &
       sleep 2
-      purple "hysteria2 已经重新启动"
+      echo "hysteria2 已经重新启动"
     }
     pgrep -x "hysteria2" >/dev/null || {
-      purple "hysteria2 启动失败，退出脚本"
+      echo "hysteria2 启动失败，退出脚本"
       ps aux | grep $(whoami) | grep -v "sshd\|bash\|grep" | awk '{print $2}' | xargs -r kill -9 >/dev/null 2>&1
       rm -rf ~/hysteria2
       exit 1
