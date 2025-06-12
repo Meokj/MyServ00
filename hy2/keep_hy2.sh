@@ -6,6 +6,33 @@ USERNAME=$(whoami)
 CONFIG_FILE="~/hysteria2/config.yaml"
 CRONJOB="*/2 * * * * ~/hysteria2/check_process.sh"
 
+get_traffic_data() {
+    response=$(curl -s -w "%{http_code}" -H "Authorization: ${PASSWORD}" http://127.0.0.1:${TCP_PORT}/traffic)
+    http_code="${response: -3}"  
+    json_data="${response:0:${#response}-3}" 
+
+    if [[ "$http_code" -ne 200 ]]; then
+        echo "获取流量信息失败，HTTP 状态码: $http_code"
+        return 1
+    fi
+
+    tx=$(echo $json_data | sed -n 's/.*"tx":$[0-9]*$.*/\1/p')
+    rx=$(echo $json_data | sed -n 's/.*"rx":$[0-9]*$.*/\1/p')
+
+    if [[ -z "$tx" ]]; then
+        tx=0
+    fi
+
+    if [[ -z "$rx" ]]; then
+        rx=0
+    fi
+
+    tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
+    rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
+
+    echo "流量发送: $tx_gb GB，流量接收: $rx_gb GB"
+}
+
 check() {
     if [ ! -f "$CONFIG_FILE" ]; then
         return 0
@@ -202,35 +229,6 @@ EOF
     echo "$CRONJOB"
   ) | crontab -
   echo "已添加定时任务每2分钟检测一次该进程，如果不存在则后台启动"
-}
-
-#!/bin/bash
-
-get_traffic_data() {
-    response=$(curl -s -w "%{http_code}" -H "Authorization: ${PASSWORD}" http://127.0.0.1:${TCP_PORT}/traffic)
-    http_code="${response: -3}"  
-    json_data="${response:0:${#response}-3}" 
-
-    if [[ "$http_code" -ne 200 ]]; then
-        echo "获取流量信息失败，HTTP 状态码: $http_code"
-        return 1
-    fi
-
-    tx=$(echo $json_data | sed -n 's/.*"tx":$[0-9]*$.*/\1/p')
-    rx=$(echo $json_data | sed -n 's/.*"rx":$[0-9]*$.*/\1/p')
-
-    if [[ -z "$tx" ]]; then
-        tx=0
-    fi
-
-    if [[ -z "$rx" ]]; then
-        rx=0
-    fi
-
-    tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
-    rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
-
-    echo "流量发送: $tx_gb GB，流量接收: $rx_gb GB"
 }
 
 get_ip
