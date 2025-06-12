@@ -140,7 +140,25 @@ EOF
   sleep 3
 }
 
+scheduled_task() {
+  cat <<'EOF' >"check_process.sh"
+#!/bin/bash
+if ! pgrep -f hysteria2 > /dev/null; then
+  cd ~/hysterai2
+  nohup ./hysteria2 server -c config.yaml >/dev/null 2>&1 &
+fi
+EOF
+
+  chmod +x "check_process.sh"
+  (
+    crontab -l 2>/dev/null | grep -v -F "$cronjob"
+    echo "$cronjob"
+  ) | crontab -
+  echo "已添加定时任务每2分钟检测一次该进程，如果不存在则后台启动"
+}
+
 get_ip
 generate_configuration
 run_hysteria2
 get_links
+scheduled_task
