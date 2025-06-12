@@ -27,7 +27,7 @@ get_udp_port() {
   udp_port=$(devil port list | awk '$2=="udp"{print $1; exit}')
 
   if [[ -n "$udp_port" ]]; then
-    :
+    UDP_PORT=$udp_port
   else
     local port_lines port_count random_port result rand_port
     port_lines=$(devil port list | awk 'NR>1')
