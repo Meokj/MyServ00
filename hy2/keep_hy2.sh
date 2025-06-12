@@ -13,7 +13,7 @@ get_traffic_data() {
 
     if [[ "$http_code" -ne 200 ]]; then
         echo
-        echo "获取流量信息失败，HTTP 状态码: $http_code"
+        echo "获取流量信息失败，状态码: $http_code"
         echo
         return 1
     fi
