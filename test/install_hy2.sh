@@ -75,7 +75,7 @@ get_ip() {
   for ((RETRIES=0; RETRIES<$MAX_RETRIES; RETRIES++)); do
       RESPONSE=$(curl -s --max-time 2 "${API_URL}/${THIRD_IP}")
       if [[ $(echo "$RESPONSE" | jq -r '.status') == "Available" ]]; then
-          echo "$THIRD_IP"
+          IP="$THIRD_IP"
           return  
       fi
       sleep 1
@@ -84,15 +84,14 @@ get_ip() {
   for ((RETRIES=0; RETRIES<$MAX_RETRIES; RETRIES++)); do
       RESPONSE=$(curl -s --max-time 2 "${API_URL}/${FIRST_IP}")
       if [[ $(echo "$RESPONSE" | jq -r '.status') == "Available" ]]; then
-          echo "$FIRST_IP"
+          IP="$FIRST_IP"
           return  
       fi
       sleep 1
   done
-  echo "$SECOND_IP"
+  IP="$SECOND_IP"
 }
 
-IP=$(get_ip)
 
 get_links() {
     cat >list.txt <<EOF
@@ -107,4 +106,5 @@ EOF
 }
 
 generate_configuration
+get_ip
 get_links
