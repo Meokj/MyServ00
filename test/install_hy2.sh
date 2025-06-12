@@ -2,24 +2,25 @@
 clear
 cd ~
 PASSWORD=$1
-
-if [ -d ~/hysteria2 ]; then
-  rm -rf ~/hysteria2
-fi
-
-mkdir -p ~/hysteria2
-cd ~/hysteria2
-
-if fetch -o hysteria2 https://github.com/Meokj/MyServ00/releases/download/1.0.0/hysteria-freebsd-amd64 >/dev/null 2>&1; then
-  :
-else
-  echo "下载hysteria2失败"
-  exit 1
-fi
-
-chmod +x hysteria2
-
 USERNAME=$(whoami)
+
+download() {
+  if [ -d ~/hysteria2 ]; then
+    rm -rf ~/hysteria2
+  fi
+
+  mkdir -p ~/hysteria2
+  cd ~/hysteria2
+
+  if fetch -o hysteria2 https://github.com/Meokj/MyServ00/releases/download/1.0.0/hysteria-freebsd-amd64 >/dev/null 2>&1; then
+    :
+  else
+    echo "下载 hysteria2 失败"
+    exit 1
+  fi
+
+  chmod +x hysteria2
+}
 
 get_udp_port() {
   UDP_PORT=""
@@ -154,6 +155,7 @@ EOF
   echo "已添加定时任务每2分钟检测一次该进程，如果不存在则后台启动"
 }
 
+download
 get_ip
 get_udp_port
 generate_configuration
