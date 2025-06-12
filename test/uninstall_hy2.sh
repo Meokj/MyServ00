@@ -29,7 +29,6 @@ manage_ports() {
     fi
 }
 
-
 pkill -x "$PROCESS_NAME"
 sleep 1
 
