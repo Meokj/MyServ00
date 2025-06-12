@@ -1,4 +1,4 @@
-# Serv00 | CT8 一键 hy2 协议快速安装
+# Serv00 | CT8 一键快速安装SingBox-hy2协议
 
 ---
 
