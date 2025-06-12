@@ -14,7 +14,7 @@ download() {
   cd ~/hysteria2
 
   if fetch -o hysteria2 https://github.com/Meokj/MyServ00/releases/download/1.0.0/hysteria-freebsd-amd64 >/dev/null 2>&1; then
-    :
+    echo "下载 hysteria2 成功"
   else
     echo "下载 hysteria2 失败"
     exit 1
