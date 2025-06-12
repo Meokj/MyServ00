@@ -44,7 +44,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/hy2/init_s
 1. 若有多个 Serv00 账号，请使用相同密码  
 2. 创建新仓库
 3. 启用Actions
-4. 复制`keep_serv00.yml`和`singbox_uninstall.yml`，记得修改这两个yml文件中URL路径为hy2
+4. 复制`keep_serv00.yml`和`singbox_uninstall.yml`
 6. 添加三个**仓库机密**：`SERVER_PASSWORD`、`SERVER_HOSTNAME`、`PASSWORD`
 7. 添加**仓库变量**`USERNAME_1`，`USERNAME_2`，根据SERV00账号数量以此类推
 8. 修改[keep_serv00.yml](.github/workflows/keep_serv00.yml)中两处代码片段：
