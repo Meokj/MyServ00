@@ -12,7 +12,9 @@ get_traffic_data() {
     json_data="${response:0:${#response}-3}" 
 
     if [[ "$http_code" -ne 200 ]]; then
+        echo
         echo "获取流量信息失败，HTTP 状态码: $http_code"
+        echo
         return 1
     fi
 
@@ -22,15 +24,16 @@ get_traffic_data() {
     if [[ -z "$tx" ]]; then
         tx=0
     fi
-
+    
     if [[ -z "$rx" ]]; then
         rx=0
     fi
 
     tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
     rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
-
+    echo
     echo "流量发送: $tx_gb GB，流量接收: $rx_gb GB"
+    echo
 }
 
 check() {
