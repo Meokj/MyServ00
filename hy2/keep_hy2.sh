@@ -12,11 +12,13 @@ check() {
     fi
     if grep -q "$IP" "$CONFIG_FILE"; then
         if pgrep -x "hysteria2" > /dev/null; then
+            get_traffic_data
             echo "hysteria2节点信息如下："
             cat ~/hysteria2/list.txt
             exit 0
         fi
         if crontab -l | grep -qF "$cronjob" && [ -d ~/hysteria2 ]; then
+            get_traffic_data
             echo "hysteria2节点信息如下："
             cat ~/hysteria2/list.txt
             exit 0
@@ -41,7 +43,7 @@ download() {
   cd ~/hysteria2
 
   if fetch -o hysteria2 https://github.com/Meokj/MyServ00/releases/download/1.0.0/hysteria-freebsd-amd64 >/dev/null 2>&1; then
-    :
+    echo "下载 hysteria2 成功"
   else
     echo "下载 hysteria2 失败"
     exit 1
@@ -200,6 +202,35 @@ EOF
     echo "$CRONJOB"
   ) | crontab -
   echo "已添加定时任务每2分钟检测一次该进程，如果不存在则后台启动"
+}
+
+#!/bin/bash
+
+get_traffic_data() {
+    response=$(curl -s -w "%{http_code}" -H "Authorization: ${PASSWORD}" http://127.0.0.1:${TCP_PORT}/traffic)
+    http_code="${response: -3}"  
+    json_data="${response:0:${#response}-3}" 
+
+    if [[ "$http_code" -ne 200 ]]; then
+        echo "获取流量信息失败，HTTP 状态码: $http_code"
+        return 1
+    fi
+
+    tx=$(echo $json_data | sed -n 's/.*"tx":$[0-9]*$.*/\1/p')
+    rx=$(echo $json_data | sed -n 's/.*"rx":$[0-9]*$.*/\1/p')
+
+    if [[ -z "$tx" ]]; then
+        tx=0
+    fi
+
+    if [[ -z "$rx" ]]; then
+        rx=0
+    fi
+
+    tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
+    rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
+
+    echo "流量发送: $tx_gb GB，流量接收: $rx_gb GB"
 }
 
 get_ip
