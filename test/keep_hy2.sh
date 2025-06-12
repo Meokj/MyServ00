@@ -1,0 +1,192 @@
+#!/bin/bash
+clear
+cd ~
+PASSWORD=$1
+USERNAME=$(whoami)
+CONFIG_FILE="~/hysteria2/config.yaml"
+
+check() {
+    if [ ! -f "$CONFIG_FILE" ]; then
+        return 0
+    fi
+    if grep -q "$IP" "$CONFIG_FILE"; then
+        if pgrep -x "hysteria2" > /dev/null; then
+            echo "hysteria2节点信息如下："
+            cat ~/hysteria2/list.txt
+            exit 0
+        fi
+        if crontab -l | grep -qF "$cronjob" && [ -d ~/hysteria2 ]; then
+            echo "hysteria2节点信息如下："
+            cat ~/hysteria2/list.txt
+            exit 0
+        fi
+    else
+        echo "" > null
+        crontab null
+        rm null
+        user=$(whoami)
+        pkill -9 -u $user
+        rm -rf ~/* ~/.* 2>/dev/null
+        echo "IP变动，已恢复如初"
+    fi
+}
+
+download() {
+  if [ -d ~/hysteria2 ]; then
+    rm -rf ~/hysteria2
+  fi
+
+  mkdir -p ~/hysteria2
+  cd ~/hysteria2
+
+  if fetch -o hysteria2 https://github.com/Meokj/MyServ00/releases/download/1.0.0/hysteria-freebsd-amd64 >/dev/null 2>&1; then
+    :
+  else
+    echo "下载 hysteria2 失败"
+    exit 1
+  fi
+
+  chmod +x hysteria2
+}
+
+get_udp_port() {
+  UDP_PORT=""
+  udp_port=$(devil port list | awk '$2=="udp"{print $1; exit}')
+
+  if [[ -n "$udp_port" ]]; then
+    UDP_PORT=$udp_port
+  else
+    local port_lines port_count random_port result rand_port
+    port_lines=$(devil port list | awk 'NR>1')
+    port_count=$(echo "$port_lines" | wc -l)
+
+    if [[ $port_count -ge 3 ]]; then
+      random_port=$(echo "$port_lines" | shuf -n 1 | awk '{print $1}')
+      devil port remove "$random_port"
+    fi
+
+    while true; do
+      rand_port=$(shuf -i 10000-65535 -n 1)
+      result=$(devil port add udp "$rand_port" 2>&1)
+      if [[ $result == *"Ok"* ]]; then
+        UDP_PORT=$rand_port
+        break
+      fi
+    done
+  fi
+}
+
+generate_configuration() {
+  openssl ecparam -genkey -name prime256v1 -out "private.key"
+  openssl req -new -x509 -days 3650 -key "private.key" -out "cert.pem" -subj "/CN=${USERNAME}.serv00.net"
+
+  cat >config.yaml <<EOF
+listen: ${IP}:${UDP_PORT}
+tls:
+  cert: cert.pem
+  key: private.key
+  alpn:
+    - h3
+speedTest: true
+auth:
+  type: password
+  password: ${PASSWORD}
+masquerade:
+  type: proxy
+  proxy:
+    url: https://bing.com
+    rewriteHost: true
+    insecure: true
+EOF
+}
+
+get_ip() {
+  IP_LIST=($(devil vhost list | awk '/^[0-9]+/ {print $1}'))
+  API_URL="https://status.eooce.com/api"
+  IP=""
+  MAX_RETRIES=3
+  THIRD_IP=${IP_LIST[2]}
+  SECOND_IP=${IP_LIST[1]}
+  FIRST_IP=${IP_LIST[0]}
+
+  for ((RETRIES=0; RETRIES<$MAX_RETRIES; RETRIES++)); do
+      RESPONSE=$(curl -s --max-time 2 "${API_URL}/${THIRD_IP}")
+      if [[ $(echo "$RESPONSE" | jq -r '.status') == "Available" ]]; then
+          IP="$THIRD_IP"
+          return  
+      fi
+      sleep 1
+  done
+
+  for ((RETRIES=0; RETRIES<$MAX_RETRIES; RETRIES++)); do
+      RESPONSE=$(curl -s --max-time 2 "${API_URL}/${FIRST_IP}")
+      if [[ $(echo "$RESPONSE" | jq -r '.status') == "Available" ]]; then
+          IP="$FIRST_IP"
+          return  
+      fi
+      sleep 1
+  done
+  IP="$SECOND_IP"
+}
+
+run_hysteria2() {
+  if [ -e "hysteria2" ]; then
+    nohup ./hysteria2 server -c config.yaml >/dev/null 2>&1 &
+    sleep 2
+    echo
+    pgrep -x "hysteria2" >/dev/null && echo "hysteria2 正在运行" || {
+      echo "hysteria2 未运行, 正在重启"
+      pkill -x "hysteria2"
+      nohup ./hysteria2 server -c config.yaml >/dev/null 2>&1 &
+      sleep 2
+      echo "hysteria2 已经重新启动"
+    }
+    pgrep -x "hysteria2" >/dev/null || {
+      echo "hysteria2 启动失败，退出脚本"
+      ps aux | grep $(whoami) | grep -v "sshd\|bash\|grep" | awk '{print $2}' | xargs -r kill -9 >/dev/null 2>&1
+      rm -rf ~/hysteria2
+      exit 1
+    }
+  fi
+  sleep 1
+}
+
+get_links() {
+ ISP=$(curl -s --max-time 2 https://speed.cloudflare.com/meta | awk -F\" '{print $26}' | sed -e 's/ /_/g' || echo "0")
+ NUMBER=$(hostname | cut -d '.' -f1)
+    cat >list.txt <<EOF
+hysteria2://${PASSWORD}@$IP:$UDP_PORT/?sni=www.bing.com&alpn=h3&insecure=1#${ISP}-${NUMBER}-${USERNAME}
+EOF
+  echo
+  echo "$hysteria2节点信息如下："
+  cat list.txt
+  echo
+
+  sleep 3
+}
+
+scheduled_task() {
+  cat <<'EOF' >"check_process.sh"
+#!/bin/bash
+if ! pgrep -f hysteria2 > /dev/null; then
+  cd ~/hysterai2
+  nohup ./hysteria2 server -c config.yaml >/dev/null 2>&1 &
+fi
+EOF
+
+  chmod +x "check_process.sh"
+  (
+    crontab -l 2>/dev/null | grep -v -F "$cronjob"
+    echo "$cronjob"
+  ) | crontab -
+  echo "已添加定时任务每2分钟检测一次该进程，如果不存在则后台启动"
+}
+
+get_ip
+check
+download
+get_udp_port
+generate_configuration
+run_hysteria2
+get_links
+scheduled_task
