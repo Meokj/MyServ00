@@ -10,7 +10,7 @@ fi
 mkdir -p ~/hysteria2
 cd ~/hysteria2
 
-if fetch -o hysteria2 https://github.com/apernet/hysteria/releases/latest/download/hysteria-freebsd-amd64 >/dev/null 2>&1; then
+if fetch -o hysteria2 https://github.com/Meokj/MyServ00/releases/download/1.0.0/hysteria-freebsd-amd64 >/dev/null 2>&1; then
   :
 else
   echo "下载hysteria2失败"
