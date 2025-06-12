@@ -14,7 +14,7 @@ yellow() {
 USERNAME=$(whoami)
 HOSTNAME=$(hostname)
 PROCESS_NAME="singbox"
-[[ "$HOSTNAME" == "s1.ct8.pl" ]] && WORKDIR="domains/${USERNAME}.ct8.pl/logs" || WORKDIR="domains/${USERNAME}.serv00.net/logs"
+WORKDIR=~/domains
 
 manage_ports() {
     local udp_ports tcp_ports udp_port
