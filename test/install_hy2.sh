@@ -51,7 +51,7 @@ generate_configuration() {
   openssl req -new -x509 -days 3650 -key "private.key" -out "cert.pem" -subj "/CN=${USERNAME}.serv00.net"
 
   cat >config.yaml <<EOF
-listen: 0.0.0.0:${UDP_PORT}
+listen: ${IP}:${UDP_PORT}
 tls:
   cert: cert.pem
   key: private.key
@@ -105,6 +105,6 @@ EOF
   sleep 3
 }
 
-generate_configuration
 get_ip
+generate_configuration
 get_links
