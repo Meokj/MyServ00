@@ -90,6 +90,7 @@ get_ip() {
       sleep 1
   done
   IP=$SECOND_IP
+  echo "$IP"
 }
 
 IP=$(get_ip)
