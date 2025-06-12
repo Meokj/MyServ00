@@ -50,6 +50,51 @@ get_udp_port() {
   fi
 }
 
+get_ports() {
+  UDP_PORT=""
+  TCP_PORT=""
+  udp_ports=($(devil port list | awk '$2=="udp"{print $1}'))
+  tcp_ports=($(devil port list | awk '$2=="tcp"{print $1}'))
+
+  if [[ ${#udp_ports[@]} -gt 1 ]]; then
+    UDP_PORT=${udp_ports[0]}
+    for ((i=1; i<${#udp_ports[@]}; i++)); do
+      devil port del udp "${udp_ports[i]}"
+    done
+  elif [[ ${#udp_ports[@]} -eq 1 ]]; then
+    UDP_PORT=${udp_ports[0]}  
+  else
+    while true; do
+      rand_udp_port=$(shuf -i 10000-65535 -n 1)
+      result=$(devil port add udp "$rand_udp_port" hy2 2>&1)
+      if [[ $result == *"Ok"* ]]; then
+        UDP_PORT=$rand_udp_port
+        break
+      fi
+    done
+  fi
+
+  if [[ ${#tcp_ports[@]} -gt 1 ]]; then
+    TCP_PORT=${tcp_ports[0]}
+    for ((i=1; i<${#tcp_ports[@]}; i++)); do
+      devil port del tcp "${tcp_ports[i]}"
+    done
+  elif [[ ${#tcp_ports[@]} -eq 1 ]]; then
+    TCP_PORT=${tcp_ports[0]}  
+  else
+    while true; do
+      rand_tcp_port=$(shuf -i 10000-65535 -n 1)
+      result=$(devil port add tcp "$rand_tcp_port" traffic 2>&1)
+      if [[ $result == *"Ok"* ]]; then
+        TCP_PORT=$rand_tcp_port
+        break
+      fi
+    done
+  fi
+}
+
+
+
 generate_configuration() {
   openssl ecparam -genkey -name prime256v1 -out "private.key"
   openssl req -new -x509 -days 3650 -key "private.key" -out "cert.pem" -subj "/CN=${USERNAME}.serv00.net"
@@ -71,6 +116,9 @@ masquerade:
     url: https://bing.com
     rewriteHost: true
     insecure: true
+trafficStats:
+  listen: 127.0.0.1:${TCP_PORT}
+  passworld: ${PASSWORD}
 EOF
 }
 
@@ -158,7 +206,7 @@ EOF
 
 download
 get_ip
-get_udp_port
+get_ports
 generate_configuration
 run_hysteria2
 scheduled_task
