@@ -75,7 +75,7 @@ get_ip() {
   for ((RETRIES=0; RETRIES<$MAX_RETRIES; RETRIES++)); do
       RESPONSE=$(curl -s --max-time 2 "${API_URL}/${THIRD_IP}")
       if [[ $(echo "$RESPONSE" | jq -r '.status') == "Available" ]]; then
-          IP=$THIRD_IP
+          echo "$THIRD_IP"
           return  
       fi
       sleep 1
@@ -84,13 +84,12 @@ get_ip() {
   for ((RETRIES=0; RETRIES<$MAX_RETRIES; RETRIES++)); do
       RESPONSE=$(curl -s --max-time 2 "${API_URL}/${FIRST_IP}")
       if [[ $(echo "$RESPONSE" | jq -r '.status') == "Available" ]]; then
-          IP=$FIRST_IP
+          echo "$FIRST_IP"
           return  
       fi
       sleep 1
   done
-  IP=$SECOND_IP
-  echo "$IP"
+  echo "$SECOND_IP"
 }
 
 IP=$(get_ip)
