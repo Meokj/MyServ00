@@ -22,7 +22,7 @@ chmod +x hysteria2
 USERNAME=$(whoami)
 
 get_udp_port() {
-  local udp_port
+  UDP_PORT=""
   udp_port=$(devil port list | awk '$2=="udp"{print $1; exit}')
 
   if [[ -n "$udp_port" ]]; then
@@ -41,15 +41,12 @@ get_udp_port() {
       rand_port=$(shuf -i 10000-65535 -n 1)
       result=$(devil port add udp "$rand_port" 2>&1)
       if [[ $result == *"Ok"* ]]; then
-        udp_port=$rand_port
+        UDP_PORT=$rand_port
         break
       fi
     done
   fi
-  echo "$udp_port"
 }
-
-UDP_PORT=$(get_udp_port)
 
 generate_configuration() {
   openssl ecparam -genkey -name prime256v1 -out "private.key"
@@ -158,6 +155,7 @@ EOF
 }
 
 get_ip
+get_udp_port
 generate_configuration
 run_hysteria2
 get_links
