@@ -3,7 +3,7 @@ clear
 cd ~
 PASSWORD=$1
 USERNAME=$(whoami)
-CONFIG_FILE="~/hysteria2/config.yaml"
+CONFIG_FILE=~/hysteria2/config.yaml
 CRONJOB="*/2 * * * * ~/hysteria2/check_process.sh"
 
 get_traffic_data() {
