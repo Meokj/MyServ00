@@ -79,8 +79,9 @@ tls:
     - h3
 speedTest: true
 auth:
-  type: password
-  password: ${PASSWORD}
+  type: userpass
+  userpass:
+    ${USERNAME}: ${PASSWORD}
 masquerade:
   type: proxy
   proxy:
