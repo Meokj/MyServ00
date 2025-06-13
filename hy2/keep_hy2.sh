@@ -17,8 +17,8 @@ get_traffic_data() {
         return 1
     fi
 
-    tx=$(echo "$json_data" | awk -F '[:,]' '{print $4}' | tr -d ' ')
-    rx=$(echo "$json_data" | awk -F '[:,}]' '{print $6}' | tr -d ' ')
+    tx=$(echo "$json_data" | jq '.user.tx')
+    rx=$(echo "$json_data" | jq '.user.rx')
 
     if [[ -z "$tx" ]]; then
         tx=0
