@@ -7,24 +7,39 @@ CONFIG_FILE=~/hysteria2/config.yaml
 CRONJOB="*/2 * * * * ~/hysteria2/check_process.sh"
 
 get_traffic_data() {
-    response=$(curl -s -w "%{http_code}" -H "Authorization: ${PASSWORD}" http://127.0.0.1:${TCP_PORT}/traffic)
-    http_code="${response: -3}"  
-    json_data="${response:0:${#response}-3}" 
+	response=$(curl -s -w "%{http_code}" -H "Authorization: ${PASSWORD}" http://127.0.0.1:${TCP_PORT}/traffic)
+	http_code="${response: -3}"
+	json_data="${response:0:${#response}-3}"
 
-    if [[ "$http_code" -ne 200 ]]; then
-        echo "获取流量信息失败，状态码: $http_code"
-        echo
-        return 1
-    fi
+	if [[ "$http_code" -ne 200 ]]; then
+		echo "获取流量信息失败，状态码: $http_code"
+		echo
+		return 1
+	fi
 
-    tx=$(echo "$json_data" | jq '.user.tx')
-    rx=$(echo "$json_data" | jq '.user.rx')
+	tx=$(echo "$json_data" | jq '.user.tx')
+	rx=$(echo "$json_data" | jq '.user.rx')
+	tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
+	rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
 
-    tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
-    rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
+	output=""
 
-    printf "发送: %.2f GB 接收: %.2f GB\n" "$tx_gb" "$rx_gb"
-    echo
+	if (($(echo "$tx_gb < 1" | bc -l))); then
+		tx_mb=$(echo "scale=2; $tx / 1024 / 1024" | bc)
+		output+="发送: ${tx_mb} MB "
+	else
+		output+="发送: ${tx_gb} GB "
+	fi
+
+	if (($(echo "$rx_gb < 1" | bc -l))); then
+		rx_mb=$(echo "scale=2; $rx / 1024 / 1024" | bc)
+		output+="接收: ${rx_mb} MB"
+	else
+		output+="接收: ${rx_gb} GB"
+	fi
+
+	echo "$output"
+	echo
 }
 
 check() {
