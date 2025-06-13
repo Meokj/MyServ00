@@ -75,7 +75,7 @@ strategy:
 
 ---
 
-### 流量使用&在线设备数
+## 流量使用&在线设备数
 
 - 参考[get_statistics.yml](.github/workflows/get_statistics.yml)
 
