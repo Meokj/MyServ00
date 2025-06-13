@@ -152,7 +152,7 @@ get_links() {
 hysteria2://***@$IP:$UDP_PORT/?sni=www.bing.com&alpn=h3&insecure=1#${ISP}-${NUMBER}-${USERNAME}
 EOF
   echo
-  echo "$hysteria2节点信息如下："
+  echo "复制以下节点信息并修改密码，格式：username:password"
   cat list.txt
   echo
 
