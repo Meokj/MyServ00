@@ -1,6 +1,7 @@
 #!/bin/bash
 clear
 PASSWORD=$1
+USERNAME=$(whoami)
 
 get_ports() {
   UDP_PORT=""
@@ -56,8 +57,8 @@ get_traffic_data() {
         return 1
     fi
 
-    tx=$(echo "$json_data" | jq '.user.tx')
-    rx=$(echo "$json_data" | jq '.user.rx')
+    tx=$(echo "$json_data" | jq ".\"$USERNAME\".tx")
+    rx=$(echo "$json_data" | jq ".\"$USERNAME\".rx")
 
     tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
     rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
