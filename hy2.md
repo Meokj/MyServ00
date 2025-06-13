@@ -12,7 +12,7 @@
 - 命令后面参数为节点密码：
 
 ```bash
-bash -c "$(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/hy2/singbox_install.sh)" -- xxxx
+bash -c "$(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/hy2/install_hy2.sh)" -- xxxx
 ```
 
 - 查看节点信息：
@@ -24,7 +24,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/hy2/node_i
 - 卸载：
 
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/hy2/singbox_uninstall.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/hy2/uninstall_hy2.sh)
 ```
 
 - 恢复初始状态：
