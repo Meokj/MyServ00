@@ -12,11 +12,11 @@ get_traffic_data() {
     json_data="${response:0:${#response}-3}" 
 
     if [[ "$http_code" -ne 200 ]]; then
-        echo
         echo "获取流量信息失败，状态码: $http_code"
         echo
         return 1
     fi
+    echo "$json_data"
 
     tx=$(echo $json_data | sed -n 's/.*"user":{"tx":$[0-9]*$,.*/\1/p')
     rx=$(echo $json_data | sed -n 's/.*"user":{"tx":[0-9]*,"rx":$[0-9]*$}.*/\1/p')
@@ -31,8 +31,7 @@ get_traffic_data() {
 
     tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
     rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
-    echo
-    echo "流量发送: $tx_gb GB，流量接收: $rx_gb GB"
+    echo "发送: $tx_gb GB 接收: $rx_gb GB"
     echo
 }
 
