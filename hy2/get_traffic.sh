@@ -78,6 +78,7 @@ get_traffic_data() {
         output+="下载: $(printf "%.2f" "$rx_gb") GB"
     fi
     echo "$output"
+    echo "用户：$(whoami)"
     echo
 }
 
