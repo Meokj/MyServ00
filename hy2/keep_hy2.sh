@@ -17,8 +17,8 @@ get_traffic_data() {
         return 1
     fi
 
-    tx=$(echo "$json_data" | jq '.user.tx')
-    rx=$(echo "$json_data" | jq '.user.rx')
+    tx=$(echo "$json_data" | jq ".\"$USERNAME\".tx")
+    rx=$(echo "$json_data" | jq ".\"$USERNAME\".rx")
 
     tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
     rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
@@ -214,7 +214,7 @@ get_links() {
  ISP=$(curl -s --max-time 2 https://speed.cloudflare.com/meta | awk -F\" '{print $26}' | sed -e 's/ /_/g' || echo "0")
  NUMBER=$(hostname | cut -d '.' -f1)
     cat >list.txt <<EOF
-hysteria2://${USERNAME}:${PASSWORD}@$IP:$UDP_PORT/?sni=www.bing.com&alpn=h3&insecure=1#${ISP}-${NUMBER}-${USERNAME}
+hysteria2://${USERNAME}:******@$IP:$UDP_PORT/?sni=www.bing.com&alpn=h3&insecure=1#${ISP}-${NUMBER}-${USERNAME}
 EOF
   echo
   echo "$hysteria2节点信息如下："
