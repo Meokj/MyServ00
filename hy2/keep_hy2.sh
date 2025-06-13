@@ -18,8 +18,8 @@ get_traffic_data() {
         return 1
     fi
 
-    tx=$(echo $json_data | sed -n 's/.*"tx":$[0-9]*$.*/\1/p')
-    rx=$(echo $json_data | sed -n 's/.*"rx":$[0-9]*$.*/\1/p')
+    tx=$(echo $json_data | sed -n 's/.*"user":{"tx":$[0-9]*$,.*/\1/p')
+    rx=$(echo $json_data | sed -n 's/.*"user":{"tx":[0-9]*,"rx":$[0-9]*$}.*/\1/p')
 
     if [[ -z "$tx" ]]; then
         tx=0
