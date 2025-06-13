@@ -20,17 +20,10 @@ get_traffic_data() {
     tx=$(echo "$json_data" | jq '.user.tx')
     rx=$(echo "$json_data" | jq '.user.rx')
 
-    if [[ -z "$tx" ]]; then
-        tx=0
-    fi
-    
-    if [[ -z "$rx" ]]; then
-        rx=0
-    fi
-
     tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
     rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
-    echo "发送: $tx_gb GB 接收: $rx_gb GB"
+
+    printf "发送: %.2f GB 接收: %.2f GB\n" "$tx_gb" "$rx_gb"
     echo
 }
 
