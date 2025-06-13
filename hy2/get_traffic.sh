@@ -2,6 +2,7 @@
 clear
 PASSWORD=$1
 USERNAME=$(whoami)
+echo "账号：$USERNAME"
 
 get_ports() {
   UDP_PORT=""
@@ -46,14 +47,13 @@ get_ports() {
   fi
 }
 
-get_traffic_data() {
+get_traffic() {
     response=$(curl -s -w "%{http_code}" -H "Authorization: ${PASSWORD}" http://127.0.0.1:${TCP_PORT}/traffic)
     http_code="${response: -3}"  
     json_data="${response:0:${#response}-3}" 
 
     if [[ "$http_code" -ne 200 ]]; then
-        echo "获取流量信息失败，状态码: $http_code"
-        echo
+        echo "获取已使用流量信息失败，状态码: $http_code"
         return 1
     fi
 
@@ -63,25 +63,41 @@ get_traffic_data() {
     tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
     rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
 
-    output=""
-
     if (( $(echo "$tx_gb < 1" | bc -l) )); then
         tx_mb=$(echo "scale=2; $tx / 1024 / 1024" | bc)
-        output+="上传: $(printf "%.2f" "$tx_mb") MB "
+        echo "上传: $(printf "%.2f" "$tx_mb") MB"
     else
-        output+="上传: $(printf "%.2f" "$tx_gb") GB "
+        echo "上传: $(printf "%.2f" "$tx_gb") GB"
     fi
 
     if (( $(echo "$rx_gb < 1" | bc -l) )); then
         rx_mb=$(echo "scale=2; $rx / 1024 / 1024" | bc)
-        output+="下载: $(printf "%.2f" "$rx_mb") MB"
+        echo "下载: $(printf "%.2f" "$rx_mb") MB"
     else
-        output+="下载: $(printf "%.2f" "$rx_gb") GB"
+        echo "下载: $(printf "%.2f" "$rx_gb") GB"
     fi
-    echo "$output"
-    echo "账号：$USERNAME"
-    echo
+}
+
+get_online_num(){
+    response=$(curl -s -w "%{http_code}" -H "Authorization: ${PASSWORD}" http://127.0.0.1:${TCP_PORT}/online)
+    http_code="${response: -3}"  
+    json_data="${response:0:${#response}-3}" 
+
+    if [[ "$http_code" -ne 200 ]]; then
+        echo "获取当前在线设备数失败，状态码: $http_code"
+        return 1
+    fi
+    
+    num=$(echo "$json_data" | jq ".\"$USERNAME\"")
+
+    if [[ -z "$num" ]]; then
+        num=0
+    fi
+
+    echo "当前在线设备数: $num"
 }
 
 get_ports
-get_traffic_data
+get_online_num
+get_traffic
+echo
