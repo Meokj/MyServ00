@@ -90,8 +90,8 @@ get_online_num(){
     
     num=$(echo "$json_data" | jq ".\"$USERNAME\"")
 
-    if [[ -z "$num" ]]; then
-        num=0
+    if [[ -z "$num" || "$num" == "null" ]]; then
+      num=0
     fi
 
     echo "当前在线设备数: $num"
