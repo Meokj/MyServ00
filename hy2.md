@@ -75,6 +75,12 @@ strategy:
 
 ---
 
+### 流量使用&在线设备数
+
+- 参考[get_statistics.yml](.github/workflows/get_statistics.yml)
+
+---
+
 ## 账号与服务器状态查询
 
 - [Serv00 账号状态查询](https://ac.fkj.pp.ua)  
