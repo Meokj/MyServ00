@@ -16,10 +16,9 @@ get_traffic_data() {
         echo
         return 1
     fi
-    echo "$json_data"
 
-    tx=$(echo $json_data | sed -n 's/.*"user":{"tx":$[0-9]*$,.*/\1/p')
-    rx=$(echo $json_data | sed -n 's/.*"user":{"tx":[0-9]*,"rx":$[0-9]*$}.*/\1/p')
+    tx=$(echo "$json_data" | awk -F '[:,]' '{print $4}' | tr -d ' ')
+    rx=$(echo "$json_data" | awk -F '[:,}]' '{print $6}' | tr -d ' ')
 
     if [[ -z "$tx" ]]; then
         tx=0
