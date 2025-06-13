@@ -149,7 +149,7 @@ get_links() {
  ISP=$(curl -s --max-time 2 https://speed.cloudflare.com/meta | awk -F\" '{print $26}' | sed -e 's/ /_/g' || echo "0")
  NUMBER=$(hostname | cut -d '.' -f1)
     cat >list.txt <<EOF
-hysteria2://${PASSWORD}@$IP:$UDP_PORT/?sni=www.bing.com&alpn=h3&insecure=1#${ISP}-${NUMBER}-${USERNAME}
+hysteria2://${USERNAME}:${PASSWORD}@$IP:$UDP_PORT/?sni=www.bing.com&alpn=h3&insecure=1#${ISP}-${NUMBER}-${USERNAME}
 EOF
   echo
   echo "$hysteria2节点信息如下："
