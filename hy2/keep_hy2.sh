@@ -155,7 +155,7 @@ masquerade:
     insecure: true
 trafficStats:
   listen: 127.0.0.1:${TCP_PORT}
-  passworld: ${PASSWORD}
+  secret: ${PASSWORD}
 EOF
 }
 
