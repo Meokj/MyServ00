@@ -6,55 +6,17 @@ USERNAME=$(whoami)
 CONFIG_FILE=~/hysteria2/config.yaml
 CRONJOB="*/2 * * * * ~/hysteria2/check_process.sh"
 
-get_traffic_data() {
-    response=$(curl -s -w "%{http_code}" -H "Authorization: ${PASSWORD}" http://127.0.0.1:${TCP_PORT}/traffic)
-    http_code="${response: -3}"  
-    json_data="${response:0:${#response}-3}" 
-
-    if [[ "$http_code" -ne 200 ]]; then
-        echo "获取流量信息失败，状态码: $http_code"
-        echo
-        return 1
-    fi
-
-    tx=$(echo "$json_data" | jq ".\"$USERNAME\".tx")
-    rx=$(echo "$json_data" | jq ".\"$USERNAME\".rx")
-
-    tx_gb=$(echo "scale=2; $tx / 1024 / 1024 / 1024" | bc)
-    rx_gb=$(echo "scale=2; $rx / 1024 / 1024 / 1024" | bc)
-
-    output=""
-
-    if (( $(echo "$tx_gb < 1" | bc -l) )); then
-        tx_mb=$(echo "scale=2; $tx / 1024 / 1024" | bc)
-        output+="上传: $(printf "%.2f" "$tx_mb") MB "
-    else
-        output+="上传: $(printf "%.2f" "$tx_gb") GB "
-    fi
-
-    if (( $(echo "$rx_gb < 1" | bc -l) )); then
-        rx_mb=$(echo "scale=2; $rx / 1024 / 1024" | bc)
-        output+="下载: $(printf "%.2f" "$rx_mb") MB"
-    else
-        output+="下载: $(printf "%.2f" "$rx_gb") GB"
-    fi
-    echo "$output"
-    echo
-}
-
 check() {
     if [ ! -f "$CONFIG_FILE" ]; then
         return 0
     fi
     if grep -q "$IP" "$CONFIG_FILE"; then
         if pgrep -x "hysteria2" > /dev/null; then
-            get_traffic_data
             echo "复制以下节点信息并修改密码，格式：username:password"
             cat ~/hysteria2/list.txt
             exit 0
         fi
         if crontab -l | grep -qF "$cronjob" && [ -d ~/hysteria2 ]; then
-            get_traffic_data
             echo "复制以下节点信息并修改密码，格式：username:password"
             cat ~/hysteria2/list.txt
             exit 0
