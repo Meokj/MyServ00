@@ -4,6 +4,13 @@ PASSWORD=$1
 USERNAME=$(whoami)
 echo "账号：$USERNAME"
 
+check_process(){
+  if ! pgrep -f hysteria2 > /dev/null; then
+    echo "hysteria2 未运行"
+    echo 0
+  fi
+}
+
 get_ports() {
   UDP_PORT=""
   TCP_PORT=""
@@ -97,6 +104,7 @@ get_online_num(){
     echo "当前在线设备数: $num"
 }
 
+check_process
 get_ports
 get_online_num
 get_traffic
