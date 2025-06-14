@@ -7,7 +7,7 @@ echo "账号：$USERNAME"
 check_process(){
   if ! pgrep -f hysteria2 > /dev/null; then
     echo "hysteria2 未运行"
-    echo 0
+    exit 0
   fi
 }
 
