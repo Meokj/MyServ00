@@ -53,6 +53,6 @@ else
     [ -d ~/hysteria2 ] && rm -r ~/hysteria2
     echo "✅ $PROCESS_NAME 卸载成功，已删除相关文件"
     manage_ports
-    purge_home
+    # purge_home
     exit 0
 fi
