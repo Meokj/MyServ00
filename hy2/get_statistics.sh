@@ -17,7 +17,7 @@ get_tcp_port() {
     echo "配置文件不存在：$CONFIG_FILE"
     exit 0
   fi
-  TCP_PORT=$(yq e '.trafficStats.listen' "$CONFIG_FILE" | grep -oE '[0-9]+$')
+  TCP_PORT=$(awk '/trafficStats:/ {found=1} found && /listen:/ {print $2; exit}' "$CONFIG_FILE" | grep -oE '[0-9]+$')
   if [[ -z "$TCP_PORT" ]]; then
     echo "未能从配置文件中解析出端口号"
     exit 0
