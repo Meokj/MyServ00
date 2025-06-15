@@ -29,6 +29,17 @@ manage_ports() {
     fi
 }
 
+purge_home() {
+  cd ~  
+  for item in *; do
+    if [[ "$item" == "backups" ]]; then
+      continue
+    fi
+    rm -rf "$item"
+  done
+  echo "✅ 已清除主目录中除 backups 以外的所有内容"
+}
+
 pkill -x "$PROCESS_NAME"
 sleep 1
 
@@ -42,5 +53,6 @@ else
     [ -d ~/hysteria2 ] && rm -r ~/hysteria2
     echo "✅ $PROCESS_NAME 卸载成功，已删除相关文件"
     manage_ports
+    purge_home
     exit 0
 fi
