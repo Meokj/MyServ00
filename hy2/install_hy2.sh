@@ -95,14 +95,11 @@ outbounds:
   - name: only_ipv4
     type: direct
     direct:
-      mode: 4   
-      fastOpen: false
+      mode: 4             
+      fast_open: false    
 rules:
   - type: field
-    outbound: only_ipv4
-    actions:
-      - type: bind
-        bindIPv4: ${IP}
+    outbound: only_ipv4   
 EOF
 }
 
