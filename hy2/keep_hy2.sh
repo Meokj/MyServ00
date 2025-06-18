@@ -124,9 +124,6 @@ outbounds:
     direct:
       mode: 4             
       fast_open: false    
-rules:
-  - type: field
-    outbound: only_ipv4   
 EOF
 }
 
