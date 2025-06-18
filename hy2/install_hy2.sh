@@ -102,7 +102,7 @@ rules:
     outbound: only_ipv4
     actions:
       - type: bind
-        bindIPv4: 188.68.248.8
+        bindIPv4: ${IP}
 EOF
 }
 
