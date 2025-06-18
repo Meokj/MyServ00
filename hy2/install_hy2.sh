@@ -91,12 +91,6 @@ masquerade:
 trafficStats:
   listen: 127.0.0.1:${TCP_PORT}
   secret: ${PASSWORD}
-outbounds:
-  - name: only_ipv4
-    type: direct
-    direct:
-      mode: 4             
-      fast_open: false    
 EOF
 }
 
