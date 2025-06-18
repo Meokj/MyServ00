@@ -120,26 +120,24 @@ generate_configuration() {
       {
         "tag": "google",
         "address": "tls://8.8.8.8",
-        "strategy": "ipv4_only",
         "detour": "direct"
       }
     ],
     "rules": [
       {
-        "geosite": "openai",
+        "geosite": ["openai"],
         "server": "wireguard-out"
       },
       {
-        "geosite": "netflix",
+        "geosite": ["netflix"],
         "server": "wireguard-out"
       },
       {
-        "geosite": "category-ads-all",
+        "geosite": ["category-ads-all"],
         "server": "block"
       }
     ],
     "final": "google",
-    "strategy": "ipv4_only",
     "disable_cache": false,
     "disable_expire": false
   },
@@ -148,7 +146,7 @@ generate_configuration() {
       "type": "hysteria2",
       "tag": "hysteria-in",
       "listen": "$IP",
-      "listen_port": "$HY2_PORT",
+      "listen_port": $HY2_PORT,
       "users": [
         {
           "password": "${PASSWORD}"
@@ -201,42 +199,19 @@ generate_configuration() {
         "outbound": "direct"
       },
       {
-        "geosite": "openai",
+        "geosite": ["openai"],
         "outbound": "wireguard-out"
       },
       {
-        "geosite": "netflix",
+        "geosite": ["netflix"],
         "outbound": "wireguard-out"
       },
       {
-        "geosite": "category-ads-all",
+        "geosite": ["category-ads-all"],
         "outbound": "block"
       }
     ],
-    "final": "direct",
-    "rule_set": [
-      {
-        "tag": "geosite-netflix",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-netflix.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "geosite-openai",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/openai.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "geosite-category-ads-all",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
-        "download_detour": "direct"
-      }
-    ]
+    "final": "direct"
   },
   "experimental": {
     "cache_file": {
