@@ -95,9 +95,14 @@ outbounds:
   - name: only_ipv4
     type: direct
     direct:
-      mode: 4
-      bindIPv4: 188.68.248.8  
+      mode: 4   
       fastOpen: false
+rules:
+  - type: field
+    outbound: only_ipv4
+    actions:
+      - type: bind
+        bindIPv4: 188.68.248.8
 EOF
 }
 
