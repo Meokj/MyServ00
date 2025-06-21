@@ -11,4 +11,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/filebrowse
 ```bash
 bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/filebrowser/uninstall_filebrowser.sh)
 ```
+---
+
+![面板设置示例](filebrowser/picture.png)
 
