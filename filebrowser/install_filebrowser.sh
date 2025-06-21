@@ -31,9 +31,9 @@ install_filebrowser() {
   USER_NAME=$(whoami)
   HOME_DIR=~/domains/${USER_NAME}.serv00.net
   INSTALL_DIR="$HOME_DIR/filebrowser"
-  CONFIG_DB="$HOME_DIR/filebrowser.db"
-  LOG_FILE="$HOME_DIR/filebrowser.log"
-  SHARE_FILES="$HOME_DIR/filebrowser_share"
+  CONFIG_DB="$INSTALL_DIR/filebrowser.db"
+  LOG_FILE="$INSTALL_DIR/filebrowser.log"
+  SHARE_FILES="$INSTALL_DIR/filebrowser_share"
 
   mkdir -p "$INSTALL_DIR" "$SHARE_FILES"
 
