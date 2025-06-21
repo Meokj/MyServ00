@@ -2,6 +2,11 @@
 
 ---
 
+## ⚠️ 注意事项
+- **请勿存放重要数据**
+
+---
+
 * 安装
 ```bash
 bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/filebrowser/install_filebrowser.sh)
