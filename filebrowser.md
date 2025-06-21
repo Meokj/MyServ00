@@ -18,7 +18,8 @@ bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/filebrowse
 ```
 ---
 
-面板设置示例
+面板设置示例：
 
-![面板设置示例](filebrowser/picture.png)
+![面板设置图片](filebrowser/picture.png)
 
+[示例网站：](https://coffeebabyfamer.serv00.net)
