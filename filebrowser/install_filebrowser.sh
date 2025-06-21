@@ -29,7 +29,7 @@ get_or_create_filebrowser_port() {
 
 install_filebrowser() {
   USER_NAME=$(whoami)
-  HOME_DIR=~/domains/${USER_NAME}.serv00.net/public_html
+  HOME_DIR=~/domains/${USER_NAME}.serv00.net
   INSTALL_DIR="$HOME_DIR/filebrowser"
   CONFIG_DB="$HOME_DIR/filebrowser.db"
   LOG_FILE="$HOME_DIR/filebrowser.log"
