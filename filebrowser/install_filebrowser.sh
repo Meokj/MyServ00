@@ -60,7 +60,8 @@ install_filebrowser() {
   echo "启动 File Browser（后台）..."
   nohup "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" > "$LOG_FILE" 2>&1 &
 
-  echo "✅ File Browser 启动完成"
+  echo "✅ File Browser 启动完成，运行端口:$PORT"
+  echo "🌐 请登录 https://panel15.serv00.com/ 设置websites，否则下面地址无法访问"
   echo "🌐 访问地址: https://$USER_NAME.serv00.net"
   echo "👤 用户名: $USER_NAME"
   echo "🔑 密码: $USER_NAME"
