@@ -13,5 +13,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/filebrowse
 ```
 ---
 
+面板设置示例
+
 ![面板设置示例](filebrowser/picture.png)
 
