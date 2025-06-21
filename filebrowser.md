@@ -7,3 +7,8 @@
 bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/filebrowser/install_filebrowser.sh)
 ```
 
+* 卸载
+```bash
+bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/filebrowser/uninstall_filebrowser.sh)
+```
+
