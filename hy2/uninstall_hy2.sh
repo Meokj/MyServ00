@@ -4,11 +4,6 @@ PROCESS_NAME="hysteria2"
 manage_ports() {
     local udp_ports tcp_ports udp_port
 
-    tcp_ports=$(devil port list | awk '$2=="tcp"{print $1}')
-    for port in $tcp_ports; do
-        devil port del tcp "$port"
-    done
-
     udp_ports=$(devil port list | awk '$2=="udp"{print $1}')
 
     if [[ $(echo "$udp_ports" | wc -l) -gt 1 ]]; then
@@ -23,9 +18,7 @@ manage_ports() {
     fi
 
     if [[ -n "$udp_port" ]]; then
-        echo "✅ 已删除所有TCP端口，只保留了一个UDP端口"
-    else
-        echo "✅ 已删除所有TCP端口"
+        echo "✅ 保留一个UDP端口，已删除其他多余UDP端口"
     fi
 }
 
