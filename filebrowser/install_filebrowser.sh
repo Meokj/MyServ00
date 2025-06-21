@@ -3,7 +3,7 @@ clear
 
 get_or_create_filebrowser_port() {
   PORT=""	
-  all_ports=($(devil port list | awk '{print $1}'))
+  all_ports=($(devil port list | awk '$1 ~ /^[0-9]+$/ {print $1}'))
   total_ports=${#all_ports[@]}
 
   if (( total_ports < 3 )); then
