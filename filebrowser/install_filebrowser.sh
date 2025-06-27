@@ -48,14 +48,14 @@ install_filebrowser() {
   chmod +x "$INSTALL_DIR/filebrowser"
 
   echo "初始化配置..."
-  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config init
-  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --address 127.0.0.1
-  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --port "$PORT"
-  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --locale zh-cn
-  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --log "$LOG_FILE"
-  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --baseurl /
-  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --root "$SHARE_FILES"
-  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" users add "$USER_NAME" "$USER_NAME" --perm.admin
+  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config init > /dev/null 2>&1
+  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --address 127.0.0.1 > /dev/null 2>&1
+  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --port "$PORT" > /dev/null 2>&1
+  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --locale zh-cn > /dev/null 2>&1
+  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --log "$LOG_FILE" > /dev/null 2>&1
+  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --baseurl / > /dev/null 2>&1
+  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --root "$SHARE_FILES" > /dev/null 2>&1
+  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" users add "$USER_NAME" "$USER_NAME" --perm.admin > /dev/null 2>&1
 
   echo "启动 File Browser（后台）..."
   nohup "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" > "$LOG_FILE" 2>&1 &
