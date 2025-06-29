@@ -34,6 +34,7 @@ install_filebrowser() {
   CONFIG_DB="$INSTALL_DIR/filebrowser.db"
   LOG_FILE="$INSTALL_DIR/filebrowser.log"
   SHARE_FILES="$INSTALL_DIR/filebrowser_share"
+  DEFAULT_PASSWORD=$(openssl rand -base64 16 | tr -dc 'A-Za-z0-9' | head -c 16)
 
   mkdir -p "$INSTALL_DIR" "$SHARE_FILES"
 
@@ -55,16 +56,16 @@ install_filebrowser() {
   "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --log "$LOG_FILE" > /dev/null 2>&1
   "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --baseurl / > /dev/null 2>&1
   "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" config set --root "$SHARE_FILES" > /dev/null 2>&1
-  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" users add "$USER_NAME" "$USER_NAME" --perm.admin > /dev/null 2>&1
+  "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" users add "$USER_NAME" "$DEFAULT_PASSWORD" --perm.admin 
 
   echo "启动 File Browser（后台）..."
   nohup "$INSTALL_DIR/filebrowser" -d "$CONFIG_DB" > "$LOG_FILE" 2>&1 &
 
   echo "✅ File Browser 启动完成，运行端口:$PORT"
-  echo "🌐 请登录 https://panel15.serv00.com/ 设置websites，否则下面地址无法访问"
+  echo "🌐 请登录 https://panel15.serv00.com/ 设置websites，否则下面地址无法访问；登陆后请先修改密码，否则只能卸载后重新安装"
   echo "🌐 访问地址: https://$USER_NAME.serv00.net"
   echo "👤 用户名: $USER_NAME"
-  echo "🔑 密码: $USER_NAME"
+  echo "🔑 密码: $DEFAULT_PASSWORD"
 }
 
 get_or_create_filebrowser_port
