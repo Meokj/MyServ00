@@ -1,6 +1,7 @@
 #!/bin/sh
 clear
 USER_NAME=$(whoami)
+NAME="picoshare"
 HOME_DIR=~/domains/${USER_NAME}.serv00.net
 INSTALL_DIR="$HOME_DIR/picoshare"
 DATA_DIR="$INSTALL_DIR/data"
@@ -72,11 +73,12 @@ install_picoshare() {
   }
 
   chmod +x "$ARCHIVE"
+  mv "$ARCHIVE" "$NAME"
 
   mkdir -p "$DATA_DIR"
 
   echo "启动 PicoShare..."
-  nohup "$ARCHIVE" -db "$DATA_DIR/store.db" -port "$PORT" -shared-secret "$SECRET" > /dev/null 2>&1 &
+  nohup env PORT="$PORT" "$INSTALL_DIR/$NAME" -db "$DATA_DIR/store.db" -shared-secret "$SECRET" > /dev/null 2>&1 &
 
   echo ""
   echo "✅ PicoShare 启动成功"
