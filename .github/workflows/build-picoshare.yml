@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag (1.4.5)'
+        description: 'Release version number (e.g., 1.4.5)'
         required: true
 
 jobs:
@@ -26,13 +26,15 @@ jobs:
     - name: Build for FreeBSD
       run: |
         cd picoshare
-        GOOS=freebsd GOARCH=amd64 go build -o picoshare_freebsd ./cmd/picoshare
+        VERSION=${{ github.event.inputs.tag }}
+        GOOS=freebsd GOARCH=amd64 go build -o picoshare-freebsd-amd64 \
+           -ldflags "-X main.version=${VERSION}" ./cmd/picoshare
 
     - name: Upload to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.event.inputs.tag }}
         name: Release ${{ github.event.inputs.tag }}
-        files: picoshare/picoshare_freebsd
+        files: picoshare/picoshare-freebsd-amd64
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
