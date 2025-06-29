@@ -35,7 +35,7 @@ check() {
   fi
 
   if [ -d "$INSTALL_DIR" ]; then
-    echo "目录 $INSTALL_DIR 已存在，请先备份或先执行卸载脚本。"
+    echo "目录 $INSTALL_DIR 已存在，请先备份再执行卸载脚本。"
     exit 1
   fi
 }
