@@ -7,8 +7,11 @@ bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/picoshare/
 bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/picoshare/uninstall.sh) 
 ```
 
----
+面板设置示例：
 
+![面板设置图片](filebrowser/picture.png)
+
+---
 [官方demo](https://demo.pico.rocks/)
 
 ---
