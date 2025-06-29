@@ -1,3 +1,12 @@
+# Serv00 一键安装picoshare
+
+---
+
+## ⚠️ 注意事项
+- **请勿上传重要数据，防止泄露**
+
+---
+
 ## 安装
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/picoshare/install.sh) password
