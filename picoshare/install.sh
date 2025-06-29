@@ -79,12 +79,17 @@ install_picoshare() {
 
   echo "启动 PicoShare..."
   nohup env PORT="$PORT" PS_SHARED_SECRET="$SECRET" "$INSTALL_DIR/$NAME" -db "$DATA_DIR/store.db" > /dev/null 2>&1 &
+  sleep 1
 
-  echo "✅ PicoShare 启动成功"
-  echo "🌐 访问地址： http://localhost:$PORT"
-  echo "🔐 登录密码： $SECRET"
-  echo "📁 数据库存储位置： $DATA_DIR/store.db"
-  echo "🛑 停止服务请运行： kill \$(pgrep -f '$NAME')"
+  if pgrep -f "$INSTALL_DIR/$NAME" > /dev/null; then
+    echo "✅ PicoShare 启动成功"
+    echo "🌐 访问地址： http://localhost:$PORT"
+    echo "🔐 登录密码： $SECRET"
+    echo "📁 数据库存储位置： $DATA_DIR/store.db"
+  else
+    echo "❌ 启动失败，检查端口 $PORT 是否被占用"
+    exit 1
+  fi
 }
 
 check "$SECRET"
