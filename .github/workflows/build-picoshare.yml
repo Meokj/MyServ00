@@ -1,7 +1,11 @@
-name: Build Picoshare for FreeBSD
+name: Build & Release FreeBSD Binary
 
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (1.4.5)'
+        required: true
 
 jobs:
   build:
@@ -11,19 +15,24 @@ jobs:
     - name: Clone picoshare source
       run: |
         git clone --depth=1 https://github.com/mtlynch/picoshare.git
+        cd picoshare
+        git fetch --tags
 
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
         go-version: '1.21'
 
-    - name: Build FreeBSD binary
+    - name: Build for FreeBSD
       run: |
         cd picoshare
         GOOS=freebsd GOARCH=amd64 go build -o picoshare_freebsd ./cmd/picoshare
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
+    - name: Upload to GitHub Releases
+      uses: softprops/action-gh-release@v1
       with:
-        name: picoshare-freebsd
-        path: picoshare/picoshare_freebsd
+        tag_name: ${{ github.event.inputs.tag }}
+        name: Release ${{ github.event.inputs.tag }}
+        files: picoshare/picoshare_freebsd
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
