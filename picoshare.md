@@ -8,5 +8,5 @@ bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/picoshare/
 ```
 
 ---
-
-[访客模式示例](https://coffeebabycolor.serv00.net/g/dd6LtsReydBW88pA)
+[官方demo](https://demo.pico.rocks/)
+[访客模式示例](https://coffeebabycolor.serv00.net/g/N2BUyKe6KDGmkrHS)
