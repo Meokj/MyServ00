@@ -26,5 +26,3 @@ bash <(curl -Ls https://raw.githubusercontent.com/Meokj/MyServ00/main/picoshare/
 ---
 [示例](https://coffeebabycolor.serv00.net/)
 
----
-[访客](https://coffeebabycolor.serv00.net/g/N2BUyKe6KDGmkrHS)
